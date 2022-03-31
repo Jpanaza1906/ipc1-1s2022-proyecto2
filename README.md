@@ -1,6 +1,6 @@
  ## UNIVERSIDAD DE SAN CARLOS DE GUATEMALA
 
- <h1>2do Proyecto de Laboratorio</h1>
+ <h3>2do Proyecto de Laboratorio</h1>
 <ul>
     <li>INGENIERIA EN CIENCIAS Y SISTEMAS</li>
     <li>FACULTAD DE INGENIERÍA</li>
