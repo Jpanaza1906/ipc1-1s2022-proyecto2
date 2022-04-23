@@ -16,10 +16,12 @@ class Libro():
             self.__ncopias += cantidad
         else:
             return{
-                
+                'msg': 'El numero de copias no es valido'
             }
     def restarcopias(self):
         self.__ncopias = self.__ncopias - 1
+    def devolvercopia(self):
+        self.__ncopias = self.__ncopias + 1
     
     def getisbn(self):
         return self.__isbn

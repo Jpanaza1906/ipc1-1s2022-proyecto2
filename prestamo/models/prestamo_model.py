@@ -2,6 +2,7 @@ from uuid import uuid4;
 
 class Prestamo():
     def __init__(self, cui, nombre, apellido, isbn, titulo, fechaprestamo, fechadevuelto):
+        self.__uuid = uuid4()
         self.__cui = cui
         self.__nombre = nombre
         self.__apellido = apellido
@@ -24,9 +25,12 @@ class Prestamo():
         return self.__fechaprestamo
     def getfechadevuelto(self):
         return self.__fechadevuelto
+    def putfechadevuelto(self, fecha):
+        self.__fechadevuelto = fecha
     
     def getdatos(self):
         return{
+            "uuid": self.__uuid,
             "cui": self.__cui,
             "nombre": self.__nombre,
             "apellido": self.__apellido,

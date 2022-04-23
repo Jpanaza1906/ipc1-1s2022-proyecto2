@@ -19,6 +19,9 @@ class Prestamista():
         return self.__nombre    
     def getapellido(self):
         return self.__apellido
+    def getprestado(self):
+        global lprestado
+        return lprestado
      
     def getdatos(self):
         return{
