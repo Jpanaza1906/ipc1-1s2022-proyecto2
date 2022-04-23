@@ -21,6 +21,26 @@ class Libro():
     def restarcopias(self):
         self.__ncopias = self.__ncopias - 1
     
+    def getisbn(self):
+        return self.__isbn
+    def getautores(self):
+        return self.__autores
+    def getypubli(self):
+        return self.__ypubli
+    def gettitulo(self):
+        return self.__titulo
+    def getedicion(self):
+        return self.__edicion
+    def gettemas(self):
+        return self.__temas
+    def getdescrip(self):
+        return self.__descrip
+    def getncopias(self):
+        return self.__ncopias
+    def getestanteria(self):
+        return self.__estanteria
+    def getfila(self):
+        return self.__fila        
     
     def getdatos(self):
         return{

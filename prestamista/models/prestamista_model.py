@@ -14,11 +14,9 @@ class Prestamista():
         lprestado = False
     
     def getcui(self):
-        return self.__cui
-    
+        return self.__cui    
     def getnombre(self):
-        return self.__nombre
-    
+        return self.__nombre    
     def getapellido(self):
         return self.__apellido
      
