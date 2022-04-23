@@ -1,3 +1,6 @@
+import re
+
+
 class Database():
     def __init__(self):
         self.__cuiprestamista = []
@@ -30,11 +33,27 @@ class Database():
             return True
         return False
 
-    def obtenerLibro(self, isbn):
-        if isbn in self.__libros:
+    def obtenerLibroisbn(self, isbn):
+        if isbn in self.__isbnlibros:
             for lbs in self.__libros:
                 if(lbs.getisbn() == isbn):
                     return lbs
+        return None
+    
+    def obtenerLibrotitulo(self, titulo):
+        for lbs in self.__libros:
+            if(lbs.gettitulo() == titulo):
+                return lbs
+        return None
+    def obtenerLibroautor(self, autor):
+        for lbs in self.__libros:
+            if(lbs.getautor() == autor):
+                return lbs
+        return None
+    def obtenerLibrofechas(self, fechaini, fechafin):
+        for lbs in self.__libros:
+            if(lbs.getypubli() > fechaini and lbs.getypubli() < fechafin):
+                return lbs
         return None
     
     def modificarLibro(self, libro, copias): 
@@ -43,7 +62,9 @@ class Database():
         for lbs in self.__libros:
             if(lbs.getisbn() == libro.getisbn()):
                 self.__libros.insert(contador,libro)
-            contador = contador + 1    
+                return True
+            contador = contador + 1 
+        return False
 
     # PRESTAMOS
 
@@ -59,7 +80,7 @@ class Database():
         # obtenemos isbn, y se le restan las copias
         contador = 0
         isbn = prestamo.getisbn()
-        if isbn in self.__libros:
+        if isbn in self.__isbnlibros: #
             for libross in self.__libros:
                 if(libross.getisbn() == isbn):
                     libross.restarcopias()
@@ -75,6 +96,7 @@ class Database():
                 cont = cont + 1
                 
         self.__prestamos.append(prestamo)
+        return True
     
     def devolverLibro(self, cui, fecha):
         cont = 0
@@ -98,13 +120,18 @@ class Database():
                     prestamo.putfechadevuelto(fecha)
                     self.__prestamos.insert(cont3,prestamo)
                 cont3 = cont3 + 1
+        return True
                 
     def consultarPrestamos(self, cui):
         prestamoscui = []
         for prestamo in self.__prestamos:
             if(prestamo.getcui() == cui):
                 prestamoscui.append(prestamo)
-        return prestamoscui
+                return prestamoscui
+        return None
+        
+lbDatabase = Database()
+        
                     
                             
                     
