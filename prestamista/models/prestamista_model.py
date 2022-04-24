@@ -1,33 +1,30 @@
 class Prestamista():
-    lprestado = False
-    def __init__(self, cui, nombre, apellido):
+    def __init__(self, cui, last_name, first_name, lprestado):
         self.__cui = cui
-        self.__nombre = nombre
-        self.__apellido = apellido
+        self.__last_name = last_name
+        self.__first_name = first_name
+        self.__lprestado  = lprestado
         
     def prestarlibro(self):
-        global lprestado
-        lprestado = True
+        self.__lprestado = True
     
     def devolverlibro(self):
-        global lprestado
-        lprestado = False
+        self.__lprestado = False
     
     def getcui(self):
         return self.__cui    
-    def getnombre(self):
-        return self.__nombre    
-    def getapellido(self):
-        return self.__apellido
+    def getlastname(self):
+        return self.__last_name  
+    def getfirstname(self):
+        return self.__first_name
     def getprestado(self):
-        global lprestado
-        return lprestado
+        return self.__lprestado
      
     def getdatos(self):
         return{
             "cui": self.__cui,
-            "nombre": self.__nombre,
-            "apellido": self.__apellido            
+            "last_name": self.__last_name,
+            "first_name": self.__first_name            
         }
     
     

@@ -1,6 +1,3 @@
-import re
-
-
 class Database():
     def __init__(self):
         self.__cuiprestamista = []
@@ -13,15 +10,14 @@ class Database():
     def agregarPrestamista(self, prestamista):
         if not(prestamista.getcui() in self.__cuiprestamista):
             self.__prestamistas.append(prestamista)
-            self.__cuiprestamista.append(prestamista.getcui())
-            print(self.__prestamistas)
+            self.__cuiprestamista.append(prestamista.getcui())            
             return True
         return False
 
     def obtenerPrestamista(self, cui):
-        if int(cui) in self.__cuiprestamista:
+        if cui in self.__cuiprestamista:
             for prestam in self.__prestamistas:
-                if(prestam.getcui() == int(cui)):
+                if(prestam.getcui() == cui):
                     return prestam
         return None
 
@@ -33,37 +29,41 @@ class Database():
             return True
         return False
 
-    def obtenerLibroisbn(self, isbn):
-        if isbn in self.__isbnlibros:
+    def obtenerLibros(self):
+        librosf = []
+        for lbs in self.__libros:
+            librosf.append(lbs.getdata())
+        return librosf
+    
+    def obtenerLibrotitulo(self, title):
+        librosf = []
+        for lbs in self.__libros:
+            if(lbs.gettitle() == title):
+                librosf.append(lbs.getdata())
+        return librosf
+    def obtenerLibroautor(self, author):
+        librosf = []
+        for lbs in self.__libros:
+            if(lbs.getauthor() == author):
+                librosf.append(lbs.getdata())
+        return librosf
+    def obtenerLibrofechas(self, fechaini, fechafin):
+        librosf = []
+        for lbs in self.__libros:
+            if(lbs.getyear() > fechaini and lbs.getyear() < fechafin):
+                librosf.append(lbs.getdata())
+        return librosf
+    
+    def modificarLibro(self, isbn, author, title, year):
+        contador = 0
+        if int(isbn) in self.__isbnlibros:
             for lbs in self.__libros:
                 if(lbs.getisbn() == isbn):
-                    return lbs
-        return None
-    
-    def obtenerLibrotitulo(self, titulo):
-        for lbs in self.__libros:
-            if(lbs.gettitulo() == titulo):
-                return lbs
-        return None
-    def obtenerLibroautor(self, autor):
-        for lbs in self.__libros:
-            if(lbs.getautor() == autor):
-                return lbs
-        return None
-    def obtenerLibrofechas(self, fechaini, fechafin):
-        for lbs in self.__libros:
-            if(lbs.getypubli() > fechaini and lbs.getypubli() < fechafin):
-                return lbs
-        return None
-    
-    def modificarLibro(self, libro, copias): 
-        libro.agregarcopias(copias)       
-        contador = 0
-        for lbs in self.__libros:
-            if(lbs.getisbn() == libro.getisbn()):
-                self.__libros.insert(contador,libro)
-                return True
-            contador = contador + 1 
+                    self.__libros[contador].setauthor(author)
+                    self.__libros[contador].settitle(title)
+                    self.__libros[contador].setyear(year)
+                    return True                    
+                contador = contador + 1
         return False
 
     # PRESTAMOS
@@ -71,11 +71,13 @@ class Database():
     def prestarLibro(self, prestamo):
         # verificar si el prestamista tiene prestado un libro
         cui = prestamo.getcui()        
-        if int(cui) in self.__cuiprestamista:
+        if cui in self.__cuiprestamista:
             for prestam in self.__prestamistas:
-                if(prestam.getcui() == int(cui)):
+                if(prestam.getcui() == cui):
                     if(prestam.getprestado() == True):
                         return None  # no puede prestar libro
+        else:
+            return "i"
 
         # obtenemos isbn, y se le restan las copias
         contador = 0
@@ -83,33 +85,33 @@ class Database():
         if isbn in self.__isbnlibros: #
             for libross in self.__libros:
                 if(libross.getisbn() == isbn):
-                    libross.restarcopias()
-                    self.__libros.insert(contador,libross)
+                    self.__libros[contador].restarcopias()
                 contador = contador + 1
+        else:
+            return "e"
         # Si el prestamista no tiene prestado un libro
         cont = 0
-        if int(cui) in self.__cuiprestamista:
+        if cui in self.__cuiprestamista:
             for prestam in self.__prestamistas:
-                if(prestam.getcui() == int(cui)):
-                    prestam.prestarlibro()
-                    self.__prestamistas.insert(cont,prestam)
+                if(prestam.getcui() == cui):
+                    self.__prestamistas[cont].prestarlibro()
                 cont = cont + 1
                 
         self.__prestamos.append(prestamo)
-        return True
+        return prestamo.getuuidjs()
     
     def devolverLibro(self, cui, fecha):
         cont = 0
-        if int(cui) in self.__cuiprestamista:
+        if cui in self.__cuiprestamista:
             for prestam in self.__prestamistas:
-                if(prestam.getcui() == int(cui)):
+                if(prestam.getcui() == cui):
                     prestam.devolverlibro()
                     self.__prestamistas.insert(cont,prestam)
                 cont = cont + 1
-        if int(cui) in self.__cuiprestamista:
+        if cui in self.__cuiprestamista:
             cont3 = 0
             for prestamo in self.__prestamos:
-                if(prestamo.getcui() == int(cui) and prestamo.getfechadevuelt != 0):
+                if(prestamo.getcui() == cui and prestamo.getfechadevuelt != 0):
                     isbn = prestamo.getisbn()
                     conti = 0
                     for libro in self.__libros:
