@@ -17,19 +17,19 @@ def crear():
                     if(body["year"] > 0 and body["year"] < 2023):
                         libro = Libro(int(body["isbn"]),body["author"],body["title"],int(body["year"]),int(body["no_copies"]),int(body["no_available_copies"]))
                         if(lbDatabase.agregarLibro(libro)):
-                            return{'msg': "Libro creado existosamente"}, 200
+                            return{'msg': "Libro creado existosamente"}, 201 #Created
                         else:
-                            return{'msg': 'ISBN ya se encuentra registrado.'}, 404
+                            return{'msg': 'ISBN ya se encuentra registrado.'}, 406 #Not acceptable
                     else:
-                        return{'msg': 'La fecha no se encuentra en los rangos válidos'}, 404
+                        return{'msg': 'La fecha no se encuentra en los rangos válidos'}, 406 #Not acceptable
                 else:
-                    return{'msg': 'Existe un error en el número de copias'}, 404
+                    return{'msg': 'Existe un error en el número de copias'}, 406 #Not acceptable
             else:
-                return{'msg': 'El contenido de los campos no es válido'}, 404
+                return{'msg': 'El contenido de los campos no es válido'}, 400 #bad request
         else:
-            return{'msg': 'Asegurese de introducir correctamente TODOS los campos'},404
+            return{'msg': 'Asegurese de introducir correctamente TODOS los campos'},400 #bad request
     except:
-        return {'msg': 'Ocurrió un error en el servidor'}, 500
+        return {'msg': 'Ocurrió un error en el servidor'}, 500 #Internal server error
 
 @libro.route('', methods = ['PUT'])
 def modificar():
@@ -39,17 +39,17 @@ def modificar():
             if(body["isbn"] != "" and body["author"] != "" and body["title"] != "" and body["year"] != ""):
                 if(body["year"] > 0 and body["year"] < 2023):
                     if(lbDatabase.modificarLibro(body["isbn"],body["author"],body["title"],body["year"])):
-                        return{'msg': "Libro modificado existosamente"}, 200
+                        return{'msg': "Libro modificado existosamente"}, 200 # ok
                     else:
-                        return{'msg': "El isbn del libro no fue encontrado"}, 404
+                        return{'msg': "El isbn del libro no fue encontrado"}, 404 #not found
                 else:
-                        return{'msg': 'La fecha no se encuentra en los rangos válidos'}, 404
+                        return{'msg': 'La fecha no se encuentra en los rangos válidos'}, 406 #not acceptable
             else:
-                return{'msg': 'El contenido de los campos no es válido'}, 404
+                return{'msg': 'El contenido de los campos no es válido'}, 400 #bad request
         else:
-            return{'msg': 'Asegurese de introducir correctamente TODOS los campos'},404
+            return{'msg': 'Asegurese de introducir correctamente TODOS los campos'},400 #bad request
     except:
-        return {'msg': 'Ocurrió un error en el servidor'}, 500
+        return {'msg': 'Ocurrió un error en el servidor'}, 500 #internal server error
 
 @libro.route('', methods = ['GET'])
 def buscar():
@@ -61,26 +61,26 @@ def buscar():
     try:
         if(title != None):
             librot = lbDatabase.obtenerLibrotitulo(title)
-            return jsonify(librot), 200
+            return jsonify(librot), 200 #ok
         elif(author != None):
             librot = lbDatabase.obtenerLibroautor(author)
-            return jsonify(librot), 200
+            return jsonify(librot), 200 #ok
         elif(year_from != None and year_to != None):
             if(int(year_from) > 0 and int(year_to) > 0):
                 if(int(year_from) < int(year_to)):
                     librot = lbDatabase.obtenerLibrofechas(int(year_from), int(year_to))
-                    return jsonify(librot), 200
+                    return jsonify(librot), 200 #ok
                 else:
-                    return{'msg': 'La fecha final no puede ser menor a la inicial'},404
+                    return{'msg': 'La fecha final no puede ser menor a la inicial'},400 #bad request
             else:
-                return{'msg': 'Las fechas deben tener valores lógicos'},404
+                return{'msg': 'Las fechas deben tener valores lógicos'},400 #bad request
         elif(title == None and author == None and year_from == None and year_to == None):
             listalb = lbDatabase.obtenerLibros()
-            return jsonify(listalb),200
+            return jsonify(listalb),200 #ok
         else:
             librot = []
-            return jsonify(librot), 200     
+            return jsonify(librot), 200 #ok  
             
     except:
-        return {'msg': 'Ocurrió un error en el servidor'}, 500
+        return {'msg': 'Ocurrió un error en el servidor'}, 500 #internal server error
     

@@ -12,21 +12,21 @@ def crear():
             if(body["cui"] != "" and body["last_name"] != "" and body["first_name"] != ""):
                 prestamista = Prestamista(body["cui"], body["last_name"],body["first_name"],False)
                 if(lbDatabase.agregarPrestamista(prestamista)):
-                    return{'msg': "Prestamista creado existosamente"}, 200
+                    return{'msg': "Prestamista creado existosamente"}, 201 #created
                 else:
-                    return{'msg': 'El CUI ya se encuentra registrado.'}, 404
+                    return{'msg': 'El CUI ya se encuentra registrado.'}, 406 #not acceptable
             else:
-                return{'msg': 'Los campos deben tener contenido.'}, 404
+                return{'msg': 'Los campos deben tener contenido.'}, 400 #bad request
         else:
-            return{'msg': 'Asegurese de introducir correctamente TODOS los campos'},404
+            return{'msg': 'Asegurese de introducir correctamente TODOS los campos'},400 #bad request
     except:
-        return {'msg': 'Ocurrió un error en el servidor'}, 500
+        return {'msg': 'Ocurrió un error en el servidor'}, 500 #internal server error
     
 @prestamista.route('/<cui>', methods = ['GET'])
 def ver(cui):
     try:
         if(cui != None):
             historialp = lbDatabase.consultarPrestamos(cui)
-            return jsonify(historialp), 200
+            return jsonify(historialp), 200 #ok
     except:
-        return {'msg': 'Ocurrió un error en el servidor'}, 500
+        return {'msg': 'Ocurrió un error en el servidor'}, 500 #internal server error
