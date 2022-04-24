@@ -16,6 +16,8 @@ def prestar():
                     return {'msg': 'El CUI no fue encontrado en los registros.'}, 404                    
                 elif(lprestado == "e"):
                     return {'msg': 'El ISBN no fue encontrado en los registros'}, 404
+                elif(lprestado == "o"):
+                    return {'msg': 'El Libro no tiene copias disponibles suficientes'}, 404
                 elif(lprestado == None):
                     return {'msg': 'El prestamista no puede prestar libros hasta que devuelva el pendiente'}, 404
                 else:

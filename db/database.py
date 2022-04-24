@@ -88,7 +88,10 @@ class Database():
         if isbn in self.__isbnlibros: #
             for libross in self.__libros:
                 if(libross.getisbn() == isbn):
-                    self.__libros[contador].restarcopias()
+                    if(libross.getnoavailablecopies() > 0):
+                        self.__libros[contador].restarcopias()
+                    else:
+                        return "o"
                 contador = contador + 1
         else:
             return "e"
