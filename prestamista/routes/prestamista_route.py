@@ -27,6 +27,11 @@ def ver(cui):
     try:
         if(cui != None):
             historialp = lbDatabase.consultarPrestamos(cui)
-            return jsonify(historialp), 200 #ok
+            if(historialp != None):
+                return jsonify(historialp), 200 #ok
+            else:
+                return{'msg': 'No se ha encontrado el CUI en los datos registrados'}, 404 #not found
+        else:
+            return{'msg': 'Los campos deben tener contenido.'}, 400 #bad request
     except:
         return {'msg': 'Ocurrió un error en el servidor'}, 500 #internal server error

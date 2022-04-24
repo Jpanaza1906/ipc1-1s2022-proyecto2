@@ -11,3 +11,13 @@
     <li>CUI: 3848221850101</li>
     <li>SEGUNDO SEMESTRE 2021</li>
 </ul>
+
+|METODO|ENDPOINT|REQUEST|
+|---|---|---|
+|POST|/book|BODY|
+|PUT|/book|BODY|
+|GET|/book|QUERY|
+|POST|/person|BODY|
+|GET|/person/:cui|PARAMS|
+|POST|/borrow|BODY|
+|PATCH|/borrow/:uuid|PARAMS|
