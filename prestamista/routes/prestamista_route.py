@@ -22,11 +22,11 @@ def crear():
     except:
         return {'msg': 'Ocurrió un error en el servidor'}, 500
     
-@prestamista.route('/person/<cui>', methods = ['GET'])
-def ver():
-    cui = request.args.get('cui')
+@prestamista.route('/<cui>', methods = ['GET'])
+def ver(cui):
     try:
         if(cui != None):
-            return           
+            historialp = lbDatabase.consultarPrestamos(cui)
+            return jsonify(historialp), 200
     except:
         return {'msg': 'Ocurrió un error en el servidor'}, 500

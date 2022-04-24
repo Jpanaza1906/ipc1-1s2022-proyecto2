@@ -1,3 +1,6 @@
+from distutils.command.build_scripts import first_line_re
+
+
 class Database():
     def __init__(self):
         self.__cuiprestamista = []
@@ -100,37 +103,70 @@ class Database():
         self.__prestamos.append(prestamo)
         return prestamo.getuuidjs()
     
-    def devolverLibro(self, cui, fecha):
-        cont = 0
+    def devolverLibro(self, uuid):
+        #se obtiene el numero de cui que le pertenece al prestamo
+        cui = "" 
+        isbn = 0  
+        conti = 0       
+        for prestamo in self.__prestamos:
+            if(str(prestamo.getuuid()) == uuid):
+                if(prestamo.getdevuelto() == False):
+                    cui = prestamo.getcui()
+                    isbn = prestamo.getisbn()
+                    self.__prestamos[conti].devolver()
+                    break
+                else:
+                    return "ya"
+            conti = conti + 1
+                
+        #Si no encontro ningun prestamos con ese id, el cui no va a tener nada, por lo que devuelve none
         if cui in self.__cuiprestamista:
+            cont = 0
             for prestam in self.__prestamistas:
                 if(prestam.getcui() == cui):
-                    prestam.devolverlibro()
-                    self.__prestamistas.insert(cont,prestam)
+                    self.__prestamistas[cont].devolverlibro()
+                    break
                 cont = cont + 1
-        if cui in self.__cuiprestamista:
+        else:
+            return None
+        # Ahora se realiza el algoritmo para devolver la copia
+        if isbn in self.__isbnlibros:
             cont3 = 0
-            for prestamo in self.__prestamos:
-                if(prestamo.getcui() == cui and prestamo.getfechadevuelt != 0):
-                    isbn = prestamo.getisbn()
-                    conti = 0
-                    for libro in self.__libros:
-                        if(libro.getisbn() == isbn):
-                            libro.devolvercopia()
-                            self.__libros.insert(conti, libro)
-                        conti = conti + 1
-                    prestamo.putfechadevuelto(fecha)
-                    self.__prestamos.insert(cont3,prestamo)
+            for lbs in self.__libros:
+                if(lbs.getisbn() == isbn):
+                    self.__libros[cont3].devolvercopia()
+                    break
                 cont3 = cont3 + 1
         return True
                 
     def consultarPrestamos(self, cui):
-        prestamoscui = []
-        for prestamo in self.__prestamos:
-            if(prestamo.getcui() == cui):
-                prestamoscui.append(prestamo)
-                return prestamoscui
-        return None
+        if(cui in self.__cuiprestamista):
+            first_name = ""
+            last_name = ""
+            for prestamista in self.__prestamistas:
+                if(prestamista.getcui() == cui):
+                    first_name = prestamista.getfirstname()
+                    last_name = prestamista.getlastname()
+            # Mostrar los prestramos        
+            record = []
+            for prestamo in  self.__prestamos:
+                if(prestamo.getcui() == cui):
+                    title = ""
+                    isbn = prestamo.getisbn()
+                    for lbs in self.__libros:
+                        if(lbs.getisbn() == isbn):
+                            title = lbs.gettitle()
+                            break
+                    record.append(prestamo.getdatos(title))
+                    
+            return {
+                "cui" : cui,
+                "first_name":first_name,
+                "last_name": last_name,
+                "record": record    
+            }
+        else:
+            return None
         
 lbDatabase = Database()
         

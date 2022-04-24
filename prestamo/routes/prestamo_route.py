@@ -10,7 +10,7 @@ def prestar():
     try:
         if("cui" in body and "isbn" in body):
             if(body["cui"] != "" and body["isbn"] != None):
-                prestamo = Prestamo(body["cui"], body["isbn"])
+                prestamo = Prestamo(body["cui"], body["isbn"],False)
                 lprestado = lbDatabase.prestarLibro(prestamo)
                 if(lprestado == "i"):
                     return {'msg': 'El CUI no fue encontrado en los registros.'}, 404                    
@@ -27,6 +27,15 @@ def prestar():
     except:
         return {'msg': 'Ocurrió un error en el servidor'}, 500
 
-@prestamo.route('/borrow/<uuid>', methods = ['PATCH'])
-def devolver():
-    return
+@prestamo.route('/<uuid>', methods = ['PATCH'])
+def devolver(uuid):
+    if uuid !=  None:
+        res = lbDatabase.devolverLibro(uuid)
+        if(res == True):
+            return{'msg': "Se devolvió el libro existosamente"}, 200
+        elif(res == 'ya'):
+            return{'msg': "El libro ya se ha devuelto antes"}, 200
+        else:
+            return{'msg': 'El uuid no coincide con los datos registrados.'}, 404 
+    else:
+        return{'msg': 'Asegurese de introducir correctamente TODOS los campos'},404
